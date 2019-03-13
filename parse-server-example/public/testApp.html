@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Parse Server - Testovacia stránka</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-min.css" rel="stylesheet">
+    <link href="/public/assets/css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="align-center">
+        <img id="parse-logo" src="/public/assets/images/parse-logo.png">
+      </div>
+
+      <div class="advice">
+        <p><strong>Vitaj</strong>! Pripravili sme si malý 5-krokový scenár pre otestovanie nášho lokálneho Parse servera.</p>
+      </div>
+
+      <p class="up-and-running">Náš lokálny Parse Server beží na adrese <span id="parse-url">...</span>. Hor sa na testovanie!?</p>
+
+      <p>Pre pripojenie na Parse server použijeme id "myAppId".  Alebo ho môžeš 
+        <a href="javascript: var newAppId = prompt('What app id should we use to talk to Parse Server?');  if (newAppId) { $('#appId').val(newAppId); }">zmeniť tu</a>.
+
+      <p>Máme express server s Parse serverom bežiacim na vrchu pripojeným na lokálnu PostgreSQL databázu.</p>
+
+      <p>V nasledujúcom testovacom scenári sa pokúsime uložiť na server nejaké dáta a potom ich načítať z databázy!</p>
+
+      <div id="step-7" class="pure-g step--container">
+        <div class="pure-u-1-5 align-center">
+          <span class="step--number">1</span>
+        </div>
+        <div class="pure-u-4-5">
+          <p class="step--info">Post recept na lokálny parse server:</p>
+          <div class="pure-g">
+            <div class="pure-u-1-5">
+              <a href="#" id="step-7-btn" class="step--action-btn">Post</a>
+            </div>
+            <div class="pure-u-4-5">
+              <!-- <div class="code-label " title="Output">Output</div> -->
+              <pre id="step-7-output" class="step--pre hidden">...</pre>
+            </div>
+          </div>
+        </div>
+        <div id="step-7-error" class="hidden pure-u-4-5 step--error"></div>
+      </div>
+
+      <div id="step-8" class="pure-g step--container step--disabled">
+        <div class="pure-u-1-5  align-center">
+          <span class="step--number">2</span>
+        </div>
+        <div class="pure-u-4-5">
+          <p class="step--info">Fetch dáta z lokálneh parse servera:</p>
+          <div class="pure-g">
+            <div class="pure-u-1-5">
+              <a href="#" id="step-8-btn" class="step--action-btn">Fetch</a>
+            </div>
+            <div class="pure-u-4-5">
+              <pre id="step-8-output" class="step--pre hidden">...</pre>
+            </div>
+          </div>
+        </div>
+        <div id="step-8-error" class="hidden pure-u-4-5 step--error"></div>
+      </div>
+
+      <div id="step-9" class="pure-g step--container step--disabled">
+        <div class="pure-u-1-5  align-center">
+          <span class="step--number">3</span>
+        </div>
+        <div class="pure-u-4-5">
+          <p class="step--info">Otestovanie Cloud Code funkcie z ./cloud/main.js:</p>
+          <div class="pure-g">
+            <div class="pure-u-1-5">
+              <a href="#" id="step-9-btn" class="step--action-btn">TEST</a>
+            </div>
+            <div class="pure-u-4-5">
+              <pre id="step-9-output" class="step--pre hidden">...</pre>
+            </div>
+          </div>
+        </div>
+        <div id="step-9-error" class="hidden pure-u-4-5 step--error"></div>
+      </div>
+
+      <div id="step-5" class="pure-g step--container step--disabled">
+        <div class="pure-u-1-5  align-center">
+          <span class="step--number">4</span>
+        </div>
+        <div class="pure-u-4-5">
+          <p class="step--info">POST novy pouzivatel:</p>
+          <div class="pure-g">
+            <div class="pure-u-1-5">
+              <a href="#" id="step-5-btn" class="step--action-btn">POST</a>
+            </div>
+            <div class="pure-u-4-5">
+              <pre id="step-5-output" class="step--pre hidden">...</pre>
+            </div>
+          </div>
+        </div>
+        <div id="step-5-error" class="hidden pure-u-4-5 step--error"></div>
+      </div>
+
+      <div id="step-6" class="pure-g step--container step--disabled">
+        <div class="pure-u-1-5  align-center">
+          <span class="step--number">5</span>
+        </div>
+        <div class="pure-u-4-5">
+          <p class="step--info">GET zoznam pouzivatelov:</p>
+          <div class="pure-g">
+            <div class="pure-u-1-5">
+              <a href="#" id="step-6-btn" class="step--action-btn">GET</a>
+            </div>
+            <div class="pure-u-4-5">
+              <pre id="step-6-output" class="step--pre hidden">...</pre>
+            </div>
+          </div>
+        </div>
+        <div id="step-6-error" class="hidden pure-u-4-5 step--error"></div>
+      </div>
+
+      <div id="step-4" class="pure-g step--container hidden">
+        <div class="pure-u-1-5  align-center">
+          <span class="step--number">✓</span>
+        </div>
+        <div class="pure-u-4-5">
+          <p id="local-parse-working">
+          Paráda! Náš parse server pracuje presne tak, ako má! :)
+          </p>
+        </div>
+      </div>
+
+      <footer id="footer" class="align-center">
+        <ul>
+          <li><a href="https://parse.com" target="_blank">Parse.com</a></li>
+          <li><a href="https://parse.com/docs" target="_blank">Dokumentácia</a></li>
+          <li><a href="https://github.com/KristianKocan/ReceptyApp-Mtaa" target="_blank">Github Repozitár</a></li>
+        </ul>
+      </footer>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="/public/assets/js/script.js"></script>
+    <input type="hidden" id="appId" value="myAppId" />
+  </body>
+</html>
