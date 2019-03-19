@@ -10,7 +10,13 @@ Steps.init = function() {
     ParseRequest.postData();
     e.preventDefault();
   })
-  this.bindBtn('#step-7-btn', function(e){
+  //pouzivatel
+  this.bindBtn('#step-31-btn', function(e){
+    ParseRequest.postNewUser();
+    e.preventDefault();
+  })
+  //recept
+  this.bindBtn('#step-21-btn', function(e){
     ParseRequest.postReceptData();
     e.preventDefault();
   })
@@ -55,66 +61,66 @@ Steps.showWorkingMessage = function() {
 
 var ParseRequest = {};
 
-ParseRequest.postData = function() {
-  XHR.setCallback(function(data){
-    // store objectID
-    Store.objectId = JSON.parse(data).objectId;
-    // close first step
-    Steps.closeStep('#step-1');
-    Steps.fillStepOutput('#step-1-output', data);
-    Steps.fillBtn('#step-1-btn', 'Posted');
-    // open second step
-    Steps.openStep('#step-2');
-    Steps.bindBtn('#step-2-btn', function(e){
-      ParseRequest.getData();
-      e.preventDefault();
-    });
-  },
-  function(error) {
-       Steps.fillStepError('#step-1-error', 'There was a failure: ' + error);
-   });
-  XHR.POST('/parse/classes/GameScore');
-};
+// ParseRequest.postData = function() {
+//   XHR.setCallback(function(data){
+//     // store objectID
+//     Store.objectId = JSON.parse(data).objectId;
+//     // close first step
+//     Steps.closeStep('#step-1');
+//     Steps.fillStepOutput('#step-1-output', data);
+//     Steps.fillBtn('#step-1-btn', 'Posted');
+//     // open second step
+//     Steps.openStep('#step-2');
+//     Steps.bindBtn('#step-2-btn', function(e){
+//       ParseRequest.getData();
+//       e.preventDefault();
+//     });
+//   },
+//   function(error) {
+//        Steps.fillStepError('#step-1-error', 'There was a failure: ' + error);
+//    });
+//   XHR.POST('/parse/classes/GameScore');
+// };
+//
+// ParseRequest.getData = function() {
+//   XHR.setCallback(function(data){
+//     // close second step
+//     Steps.closeStep('#step-2');
+//     Steps.fillStepOutput('#step-2-output', data);
+//     Steps.fillBtn('#step-2-btn', 'Fetched');
+//     // open third step
+//     Steps.openStep('#step-3');
+//     Steps.bindBtn('#step-3-btn', function(e){
+//       ParseRequest.postCloudCodeData();
+//       e.preventDefault();
+//       });
+//     },
+//     function(error) {
+//     	Steps.fillStepError('#step-2-error', 'There was a failure: ' + error);
+//   });
+//   XHR.GET('/parse/classes/GameScore');
+// }
 
-ParseRequest.getData = function() {
-  XHR.setCallback(function(data){
-    // close second step
-    Steps.closeStep('#step-2');
-    Steps.fillStepOutput('#step-2-output', data);
-    Steps.fillBtn('#step-2-btn', 'Fetched');
-    // open third step
-    Steps.openStep('#step-3');
-    Steps.bindBtn('#step-3-btn', function(e){
-      ParseRequest.postCloudCodeData();
-      e.preventDefault();
-      });
-    },
-    function(error) {
-    	Steps.fillStepError('#step-2-error', 'There was a failure: ' + error);
-  });  
-  XHR.GET('/parse/classes/GameScore');
-}
-
-ParseRequest.postCloudCodeData = function() {
-  XHR.setCallback(function(data){
-    // close second step
-    Steps.closeStep('#step-3');
-    Steps.fillStepOutput('#step-3-output', data);
-    Steps.fillBtn('#step-3-btn', 'Tested');
-    // open third step
-    //Steps.showWorkingMessage();
-    // POST noveho usera
-    Steps.openStep('#step-5');
-    Steps.bindBtn('#step-5-btn', function(e){
-      ParseRequest.postNewUser();
-      e.preventDefault();
-      });
-    },
-    function(error) {
-    	Steps.fillStepError('#step-3-error', 'There was a failure: ' + error);
-    });  
-    XHR.POST('/parse/functions/hello');
-}
+// ParseRequest.postCloudCodeData = function() {
+//   XHR.setCallback(function(data){
+//     // close second step
+//     Steps.closeStep('#step-3');
+//     Steps.fillStepOutput('#step-3-output', data);
+//     Steps.fillBtn('#step-3-btn', 'Tested');
+//     // open third step
+//     //Steps.showWorkingMessage();
+//     // POST noveho usera
+//     Steps.openStep('#step-5');
+//     Steps.bindBtn('#step-5-btn', function(e){
+//       ParseRequest.postNewUser();
+//       e.preventDefault();
+//       });
+//     },
+//     function(error) {
+//     	Steps.fillStepError('#step-3-error', 'There was a failure: ' + error);
+//     });
+//     XHR.POST('/parse/functions/hello');
+// }
 
 //API call na POST noveho receptu
 ParseRequest.postReceptData = function() {
@@ -122,18 +128,18 @@ ParseRequest.postReceptData = function() {
     // store objectID
     Store.objectId = JSON.parse(data).objectId;
     // close first step
-    Steps.closeStep('#step-7');
-    Steps.fillStepOutput('#step-7-output', data);
-    Steps.fillBtn('#step-7-btn', 'Posted');
+    Steps.closeStep('#step-21');
+    Steps.fillStepOutput('#step-21-output', data);
+    Steps.fillBtn('#step-21-btn', 'Posted');
     // open second step
-    Steps.openStep('#step-8');
-    Steps.bindBtn('#step-8-btn', function(e){
+    Steps.openStep('#step-22');
+    Steps.bindBtn('#step-22-btn', function(e){
       ParseRequest.getData();
       e.preventDefault();
     });
   },
   function(error) {
-       Steps.fillStepError('#step-7-error', 'There was a failure: ' + error);
+       Steps.fillStepError('#step-21-error', 'There was a failure: ' + error);
    });
   XHR.POSTR('/parse/classes/recept');
 };
@@ -142,74 +148,193 @@ ParseRequest.postReceptData = function() {
 ParseRequest.getData = function() {
   XHR.setCallback(function(data){
     // close second step
-    Steps.closeStep('#step-8');
-    Steps.fillStepOutput('#step-8-output', data);
-    Steps.fillBtn('#step-8-btn', 'Fetched');
+    Steps.closeStep('#step-22');
+    Steps.fillStepOutput('#step-22-output', data);
+    Steps.fillBtn('#step-22-btn', 'GET');
     // open third step
-    Steps.openStep('#step-9');
-    Steps.bindBtn('#step-9-btn', function(e){
-      ParseRequest.postCloudCodeData2();
+    Steps.openStep('#step-23');
+    Steps.bindBtn('#step-23-btn', function(e){
+      ParseRequest.putRecept();
       e.preventDefault();
       });
     },
     function(error) {
-    	Steps.fillStepError('#step-8-error', 'There was a failure: ' + error);
+    	Steps.fillStepError('#step-22-error', 'There was a failure: ' + error);
   });  
   XHR.GET('/parse/classes/recept');
 }
-//API call na cloud code
-ParseRequest.postCloudCodeData2 = function() {
+
+//API call PUT na recept
+ParseRequest.putRecept = function() {
   XHR.setCallback(function(data){
-    // close third step
-    Steps.closeStep('#step-9');
-    Steps.fillStepOutput('#step-9-output', data);
-    Steps.fillBtn('#step-9-btn', 'Tested');
-    // POST noveho usera
-    Steps.openStep('#step-5');
-    Steps.bindBtn('#step-5-btn', function(e){
-      ParseRequest.postNewUser();
-      e.preventDefault();
+        Steps.closeStep('#step-23');
+        Steps.fillStepOutput('#step-23-output', data);
+        Steps.fillBtn('#step-23-btn', 'Recept put Tested');
+        Steps.openStep('#step-24');
+        Steps.bindBtn('#step-24-btn', function(e){
+          ParseRequest.getReceptsData();
+          e.preventDefault();
+        });
+      },
+      function(error) {
+        Steps.fillStepError('#step-23-error', 'There was a failure: ' + error);
       });
-    },
-    function(error) {
-    	Steps.fillStepError('#step-9-error', 'There was a failure: ' + error);
-    });  
-    XHR.POST('/parse/functions/hello');
-}
+  XHR.PUTR('/parse/classes/recept');
+};
+
+//API call GET na receptov
+ParseRequest.getReceptsData = function() {
+  XHR.setCallback(function(data){
+        Steps.closeStep('#step-24');
+        Steps.fillStepOutput('#step-24-output', data);
+        Steps.fillBtn('#step-24-btn', 'Recepts Tested');
+        Steps.openStep('#step-25');
+        Steps.bindBtn('#step-25-btn', function(e){
+          ParseRequest.deleteRecept();
+          e.preventDefault();
+        });
+      },
+      function(error) {
+        Steps.fillStepError('#step-24-error', 'There was a failure: ' + error);
+      });
+  XHR.GETR('/parse/classes/recept');
+};
+
+
+
+
+//API call DELETE  recept
+ParseRequest.deleteRecept = function() {
+  XHR.setCallback(function(data){
+        Steps.closeStep('#step-25');
+        Steps.fillStepOutput('#step-25-output', data);
+        Steps.fillBtn('#step-25-btn', 'Recept delete Tested');
+        // ukaz success po tomto DELETE
+        Steps.showWorkingMessage();
+
+      },
+      function(error) {
+        Steps.fillStepError('#step-25-error', 'There was a failure: ' + error);
+      });
+  XHR.DEL('/parse/classes/recept');
+};
+
+
+
+// //API call na cloud code
+// ParseRequest.postCloudCodeData2 = function() {
+//   XHR.setCallback(function(data){
+//     // close third step
+//     Steps.closeStep('#step-9');
+//     Steps.fillStepOutput('#step-9-output', data);
+//     Steps.fillBtn('#step-9-btn', 'Tested');
+//     // POST noveho usera
+//     Steps.openStep('#step-5');
+//     Steps.bindBtn('#step-5-btn', function(e){
+//       ParseRequest.postNewUser();
+//       e.preventDefault();
+//       });
+//     },
+//     function(error) {
+//     	Steps.fillStepError('#step-9-error', 'There was a failure: ' + error);
+//     });
+//     XHR.POST('/parse/functions/hello');
+// }
 
 //API call na POST noveho usera
 ParseRequest.postNewUser = function() {
   XHR.setCallback(function(data){
-    Steps.closeStep('#step-5');
-    Steps.fillStepOutput('#step-5-output', data);
-    Steps.fillBtn('#step-5-btn', 'New User');
+    Store.objectId = JSON.parse(data).objectId;
+    Steps.closeStep('#step-31');
+    Steps.fillStepOutput('#step-31-output', data);
+    Steps.fillBtn('#step-31-btn', 'New User');
     // get na userov
-    Steps.openStep('#step-6');
-    Steps.bindBtn('#step-6-btn', function(e){
-      ParseRequest.getUserData();
+    Steps.openStep('#step-32');
+    Steps.bindBtn('#step-32-btn', function(e){
+      ParseRequest.getUser();
       e.preventDefault();
       });
     },
     function(error) {
-    	Steps.fillStepError('#step-5-error', 'There was a failure: ' + error);
+    	Steps.fillStepError('#step-31-error', 'There was a failure: ' + error);
   });  
-  XHR.POSTU('/parse/users');
+  XHR.POSTU('/parse/classes/pouzivatel');
+};
+
+//API call na GET noveho pouzivatela
+ParseRequest.getUser= function() {
+  XHR.setCallback(function(data){
+        // close second step
+        Steps.closeStep('#step-32');
+        Steps.fillStepOutput('#step-32-output', data);
+        Steps.fillBtn('#step-32-btn', 'Get user');
+        // open third step
+        Steps.openStep('#step-33');
+        Steps.bindBtn('#step-33-btn', function(e){
+          ParseRequest.putUser();
+          e.preventDefault();
+        });
+      },
+      function(error) {
+        Steps.fillStepError('#step-32-error', 'There was a failure: ' + error);
+      });
+  XHR.GET('/parse/classes/pouzivatel');
+}
+
+//API call PUT na user
+ParseRequest.putUser = function() {
+  XHR.setCallback(function(data){
+        Steps.closeStep('#step-33');
+        Steps.fillStepOutput('#step-33-output', data);
+        Steps.fillBtn('#step-33-btn', 'Put user tested');
+        Steps.openStep('#step-34');
+        Steps.bindBtn('#step-34-btn', function(e){
+          ParseRequest.getUsers();
+          e.preventDefault();
+        });
+      },
+      function(error) {
+        Steps.fillStepError('#step-33-error', 'There was a failure: ' + error);
+      });
+  XHR.PUTU('/parse/classes/pouzivatel');
 };
 
 //API call GET na userov
-ParseRequest.getUserData = function() {
+ParseRequest.getUsers = function() {
   XHR.setCallback(function(data){
-      Steps.closeStep('#step-6');
-      Steps.fillStepOutput('#step-6-output', data);
-      Steps.fillBtn('#step-6-btn', 'Users Tested');
-      // ukaz success po tomto GETE
-      Steps.showWorkingMessage();
+      Steps.closeStep('#step-34');
+      Steps.fillStepOutput('#step-34-output', data);
+      Steps.fillBtn('#step-34-btn', 'Users Tested');
+        Steps.openStep('#step-35');
+        Steps.bindBtn('#step-35-btn', function(e){
+          ParseRequest.deletePouzivatel();
+          e.preventDefault();
+        });
     },
     function(error) {
-    	Steps.fillStepError('#step-6-error', 'There was a failure: ' + error);
+    	Steps.fillStepError('#step-34-error', 'There was a failure: ' + error);
   });  
-  XHR.GETU('/parse/users');
+  XHR.GETU('/parse/classes/pouzivatel');
 };
+
+//API call DELETE  pouzivatel
+ParseRequest.deletePouzivatel = function() {
+  XHR.setCallback(function(data){
+        Steps.closeStep('#step-35');
+        Steps.fillStepOutput('#step-35-output', data);
+        Steps.fillBtn('#step-35-btn', 'Pouzivatel DELETE Tested');
+        // ukaz success po tomto DELETE
+        Steps.showWorkingMessage();
+
+      },
+      function(error) {
+        Steps.fillStepError('#step-34-error', 'There was a failure: ' + error);
+      });
+  XHR.DEL('/parse/classes/pouzivatel');
+};
+
+
+
 
 /**
  * Store objectId and other references
@@ -259,7 +384,9 @@ XHR.POST = function(path, callback) {
 }
 
 XHR.POSTR = function(path, callback) {
-  var seed = {"nazov":"Medovy Kolac","obsah":"nejaky obsah","fotka":{"__type" : "File","name":"/public/assets/images/parse-logo.png"},"hviezdy":5,"datum":JSON.stringify(new Date()),"autorId":"nejaky autor"}
+  var seed = {"nazov":"Medovy Kolac","obsah":"nejaky obsah"
+    ,"fotka":{"__type" : "File","name":"/public/assets/images/parse-logo.png"},
+    "hviezdy":5,"datum":JSON.stringify(new Date()),"pouzivatel":{"autorId":"nejaky autor"}};
   this.xhttp.open("POST", Config.getUrl() + path, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.setRequestHeader("Content-type", "application/json");
@@ -282,6 +409,41 @@ XHR.GET = function(path, callback) {
 }
 
 XHR.GETU = function(path, callback) {
+  this.xhttp.open("GET", Config.getUrl() + path, true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("Content-type", "application/json");
+  this.xhttp.send(null);
+}
+
+//DELETE recept, pouzivatel
+XHR.DEL = function(path, callback) {
+  this.xhttp.open("DELETE", Config.getUrl() + path + '/' + Store.objectId, true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("Content-type", "application/json");
+  this.xhttp.send(null);
+}
+
+
+//PUT recept
+XHR.PUTR = function(path, callback) {
+  var seed = {"obsah":"updated recept"};
+  this.xhttp.open("PUT", Config.getUrl() + path+ '/' + Store.objectId, true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("Content-type", "application/json");
+  this.xhttp.send(JSON.stringify(seed));
+}
+
+//PUT user
+XHR.PUTU = function(path, callback) {
+  var seed = {"username":"updatedAdmin"};
+  this.xhttp.open("PUT", Config.getUrl() + path+ '/' + Store.objectId, true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("Content-type", "application/json");
+  this.xhttp.send(JSON.stringify(seed));
+}
+
+//GET ZOZNAM RECEPTOV
+XHR.GETR = function(path, callback) {
   this.xhttp.open("GET", Config.getUrl() + path, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.setRequestHeader("Content-type", "application/json");
