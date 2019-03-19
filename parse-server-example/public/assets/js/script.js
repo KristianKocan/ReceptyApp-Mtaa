@@ -10,14 +10,15 @@ Steps.init = function() {
     ParseRequest.postData();
     e.preventDefault();
   })
-  //pouzivatel
-  this.bindBtn('#step-31-btn', function(e){
-    ParseRequest.postNewUser();
-    e.preventDefault();
-  })
+
   //recept
   this.bindBtn('#step-21-btn', function(e){
     ParseRequest.postReceptData();
+    e.preventDefault();
+  })
+  //login...
+  this.bindBtn('#step-30-btn', function(e){
+    ParseRequest.loginUser();
     e.preventDefault();
   })
 }
@@ -127,7 +128,7 @@ ParseRequest.postReceptData = function() {
   XHR.setCallback(function(data){
     // store objectID
     Store.objectId = JSON.parse(data).objectId;
-    // close first step
+        // close first step
     Steps.closeStep('#step-21');
     Steps.fillStepOutput('#step-21-output', data);
     Steps.fillBtn('#step-21-btn', 'Posted');
@@ -241,6 +242,29 @@ ParseRequest.deleteRecept = function() {
 //     XHR.POST('/parse/functions/hello');
 // }
 
+
+//LOGIN user
+ParseRequest.loginUser= function() {
+  XHR.setCallback(function(data){
+        // close second step
+        Token.sessionToken = JSON.parse(data).sessionToken;
+        Steps.closeStep('#step-30');
+        Steps.fillStepOutput('#step-30-output', data);
+        Steps.fillBtn('#step-30-btn', 'Login user');
+        // open third step
+         Steps.openStep('#step-31');
+         Steps.bindBtn('#step-31-btn', function(e){
+           ParseRequest.postNewUser();
+           e.preventDefault();
+         });
+      },
+      function(error) {
+        Steps.fillStepError('#step-30-error', 'There was a failure: ' + error);
+      });
+  XHR.GETL('/parse/login');
+}
+
+
 //API call na POST noveho usera
 ParseRequest.postNewUser = function() {
   XHR.setCallback(function(data){
@@ -258,7 +282,7 @@ ParseRequest.postNewUser = function() {
     function(error) {
     	Steps.fillStepError('#step-31-error', 'There was a failure: ' + error);
   });  
-  XHR.POSTU('/parse/classes/pouzivatel');
+  XHR.POSTU('/parse/users');
 };
 
 //API call na GET noveho pouzivatela
@@ -278,7 +302,7 @@ ParseRequest.getUser= function() {
       function(error) {
         Steps.fillStepError('#step-32-error', 'There was a failure: ' + error);
       });
-  XHR.GET('/parse/classes/pouzivatel');
+  XHR.GET('/parse/users');
 }
 
 //API call PUT na user
@@ -296,7 +320,7 @@ ParseRequest.putUser = function() {
       function(error) {
         Steps.fillStepError('#step-33-error', 'There was a failure: ' + error);
       });
-  XHR.PUTU('/parse/classes/pouzivatel');
+  XHR.PUTU('/parse/users');
 };
 
 //API call GET na userov
@@ -314,7 +338,7 @@ ParseRequest.getUsers = function() {
     function(error) {
     	Steps.fillStepError('#step-34-error', 'There was a failure: ' + error);
   });  
-  XHR.GETU('/parse/classes/pouzivatel');
+  XHR.GETU('/parse/users');
 };
 
 //API call DELETE  pouzivatel
@@ -328,9 +352,9 @@ ParseRequest.deletePouzivatel = function() {
 
       },
       function(error) {
-        Steps.fillStepError('#step-34-error', 'There was a failure: ' + error);
+        Steps.fillStepError('#step-35-error', 'There was a failure: ' + error);
       });
-  XHR.DEL('/parse/classes/pouzivatel');
+  XHR.DEL('/parse/users');
 };
 
 
@@ -342,6 +366,10 @@ ParseRequest.deletePouzivatel = function() {
 
 var Store = {
   objectId: ""
+};
+
+var Token = {
+  sessionToken: ""
 };
 
 var Config = {};
@@ -394,7 +422,7 @@ XHR.POSTR = function(path, callback) {
 }
 
 XHR.POSTU = function(path, callback) {
-  var seed = {"username":"admin3","password":"admin3","email":"meno3@meno3.sk"}
+  var seed = {"username":"admin13","password":"admin3","email":"men13@meno3.sk", "testovanieUpdate":"nefunguje"}
   this.xhttp.open("POST", Config.getUrl() + path, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.setRequestHeader("Content-type", "application/json");
@@ -415,13 +443,24 @@ XHR.GETU = function(path, callback) {
   this.xhttp.send(null);
 }
 
+//LOGIN user
+XHR.GETL = function(path, callback) {
+  this.xhttp.open("GET", Config.getUrl()+ path + "?password=admin3&email=meno3@meno3.sk", true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.send(null);
+}
+
+
 //DELETE recept, pouzivatel
 XHR.DEL = function(path, callback) {
   this.xhttp.open("DELETE", Config.getUrl() + path + '/' + Store.objectId, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("X-Parse-Master-Key", "masterKey");
+  //this.xhttp.setRequestHeader("X-Parse-Session-Token", Token.sessionToken);
   this.xhttp.setRequestHeader("Content-type", "application/json");
   this.xhttp.send(null);
 }
+
 
 
 //PUT recept
@@ -435,9 +474,11 @@ XHR.PUTR = function(path, callback) {
 
 //PUT user
 XHR.PUTU = function(path, callback) {
-  var seed = {"username":"updatedAdmin"};
+  var seed = {"testovanieUpdate":"funguje"};
   this.xhttp.open("PUT", Config.getUrl() + path+ '/' + Store.objectId, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+ // this.xhttp.setRequestHeader("X-Parse-Session-Token", Token.sessionToken);
+  this.xhttp.setRequestHeader("X-Parse-Master-Key", "masterKey");
   this.xhttp.setRequestHeader("Content-type", "application/json");
   this.xhttp.send(JSON.stringify(seed));
 }
