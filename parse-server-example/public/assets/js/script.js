@@ -201,18 +201,17 @@ ParseRequest.getReceptsData = function() {
   XHR.GETR('/parse/classes/recept');
 };
 
-
-
-
 //API call DELETE  recept
 ParseRequest.deleteRecept = function() {
   XHR.setCallback(function(data){
         Steps.closeStep('#step-25');
         Steps.fillStepOutput('#step-25-output', data);
         Steps.fillBtn('#step-25-btn', 'Recept delete Tested');
-        // ukaz success po tomto DELETE
-        Steps.showWorkingMessage();
-
+        Steps.openStep('#step-26');
+        Steps.bindBtn('#step-26-btn', function(e){
+          ParseRequest.uploadFile();
+          e.preventDefault();
+        });
       },
       function(error) {
         Steps.fillStepError('#step-25-error', 'There was a failure: ' + error);
@@ -220,7 +219,20 @@ ParseRequest.deleteRecept = function() {
   XHR.DEL('/parse/classes/recept');
 };
 
-
+//API call UPLOAD file
+ParseRequest.uploadFile = function() {
+  XHR.setCallback(function(data){
+        Steps.closeStep('#step-26');
+        Steps.fillStepOutput('#step-26-output', data);
+        Steps.fillBtn('#step-26-btn', 'File Upload Tested');
+        // ukaz success po tomto UPLOADE
+        Steps.showWorkingMessage();
+      },
+      function(error) {
+        Steps.fillStepError('#step-26-error', 'There was a failure: ' + error);
+      });
+  XHR.POSTF('/parse/files');
+};
 
 // //API call na cloud code
 // ParseRequest.postCloudCodeData2 = function() {
@@ -412,7 +424,6 @@ Config.getUrl = function() {
   return url;
 }
 
-
 /**
  * XHR object
  */
@@ -427,7 +438,7 @@ XHR.setCallback = function(callback, failureCallback) {
       if (_self.xhttp.status >= 200 && _self.xhttp.status <= 299) {
         callback(_self.xhttp.responseText);
       } else {
-        failureCallback(_self.xhttp.responseText);
+        failureCallback(_self.xhttp.status);
       }
     }
   };
@@ -457,6 +468,17 @@ XHR.POSTU = function(path, callback) {
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.setRequestHeader("Content-type", "application/json");
   this.xhttp.send(JSON.stringify(seed));
+}
+
+XHR.POSTF = function(path, callback) {
+  var file = new File(["foo"], "foo.txt", {
+    type: "text/plain",
+  });
+  this.xhttp.open("POST", Config.getUrl() + path + '/text.txt', true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("Content-type", "text/plain");
+  //this.xhttp.setRequestHeader("X-File-Name", 'parselogo.png');
+  this.xhttp.send(file);
 }
 
 XHR.GET = function(path, callback) {
