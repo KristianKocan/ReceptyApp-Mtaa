@@ -248,6 +248,8 @@ ParseRequest.loginUser= function() {
   XHR.setCallback(function(data){
         // close second step
         Token.sessionToken = JSON.parse(data).sessionToken;
+        console.log(Token.sessionToken);
+        console.log(data);
         Steps.closeStep('#step-30');
         Steps.fillStepOutput('#step-30-output', data);
         Steps.fillBtn('#step-30-btn', 'Login user');
@@ -261,7 +263,7 @@ ParseRequest.loginUser= function() {
       function(error) {
         Steps.fillStepError('#step-30-error', 'There was a failure: ' + error);
       });
-  XHR.GETL('/parse/login');
+  XHR.GETLOGIN('/parse/login');
 }
 
 
@@ -269,6 +271,7 @@ ParseRequest.loginUser= function() {
 ParseRequest.postNewUser = function() {
   XHR.setCallback(function(data){
     Store.objectId = JSON.parse(data).objectId;
+    console.log(Token.sessionToken);
     Steps.closeStep('#step-31');
     Steps.fillStepOutput('#step-31-output', data);
     Steps.fillBtn('#step-31-btn', 'New User');
@@ -289,6 +292,7 @@ ParseRequest.postNewUser = function() {
 ParseRequest.getUser= function() {
   XHR.setCallback(function(data){
         // close second step
+        console.log(Token.sessionToken);
         Steps.closeStep('#step-32');
         Steps.fillStepOutput('#step-32-output', data);
         Steps.fillBtn('#step-32-btn', 'Get user');
@@ -308,6 +312,8 @@ ParseRequest.getUser= function() {
 //API call PUT na user
 ParseRequest.putUser = function() {
   XHR.setCallback(function(data){
+        console.log(Token.sessionToken);
+
         Steps.closeStep('#step-33');
         Steps.fillStepOutput('#step-33-output', data);
         Steps.fillBtn('#step-33-btn', 'Put user tested');
@@ -326,14 +332,15 @@ ParseRequest.putUser = function() {
 //API call GET na userov
 ParseRequest.getUsers = function() {
   XHR.setCallback(function(data){
-      Steps.closeStep('#step-34');
+        console.log(Token.sessionToken);
+        Steps.closeStep('#step-34');
       Steps.fillStepOutput('#step-34-output', data);
       Steps.fillBtn('#step-34-btn', 'Users Tested');
-        Steps.openStep('#step-35');
-        Steps.bindBtn('#step-35-btn', function(e){
-          ParseRequest.deletePouzivatel();
-          e.preventDefault();
-        });
+      Steps.openStep('#step-35');
+      Steps.bindBtn('#step-35-btn', function(e){
+        ParseRequest.deleteUser();
+        e.preventDefault();
+      });
     },
     function(error) {
     	Steps.fillStepError('#step-34-error', 'There was a failure: ' + error);
@@ -342,19 +349,42 @@ ParseRequest.getUsers = function() {
 };
 
 //API call DELETE  pouzivatel
-ParseRequest.deletePouzivatel = function() {
+ParseRequest.deleteUser = function() {
   XHR.setCallback(function(data){
+        console.log(Token.sessionToken);
+
         Steps.closeStep('#step-35');
         Steps.fillStepOutput('#step-35-output', data);
         Steps.fillBtn('#step-35-btn', 'Pouzivatel DELETE Tested');
-        // ukaz success po tomto DELETE
-        Steps.showWorkingMessage();
+        Steps.openStep('#step-36');
+        Steps.bindBtn('#step-36-btn', function(e){
+          ParseRequest.logoutUser();
+          e.preventDefault();
+        });
 
       },
       function(error) {
         Steps.fillStepError('#step-35-error', 'There was a failure: ' + error);
       });
   XHR.DEL('/parse/users');
+};
+
+ParseRequest.logoutUser = function() {
+
+  XHR.setCallback(function(data){
+        console.log(Token.sessionToken);
+
+        Steps.closeStep('#step-36');
+        Steps.fillStepOutput('#step-36-output', data);
+        Steps.fillBtn('#step-36-btn', 'Pouzivatel DELETE Tested');
+        // ukaz success po tomto LogOut
+        Steps.showWorkingMessage();
+
+      },
+      function(error) {
+        Steps.fillStepError('#step-36-error', 'There was a failure: ' + error);
+      });
+  XHR.POSTLOGOUT('/parse/logout');
 };
 
 
@@ -422,7 +452,7 @@ XHR.POSTR = function(path, callback) {
 }
 
 XHR.POSTU = function(path, callback) {
-  var seed = {"username":"admin13","password":"admin3","email":"men13@meno3.sk", "testovanieUpdate":"nefunguje"}
+  var seed = {"username":"admin15","password":"admin3","email":"men15@meno3.sk", "testovanieUpdate":"nefunguje"}
   this.xhttp.open("POST", Config.getUrl() + path, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.setRequestHeader("Content-type", "application/json");
@@ -443,13 +473,32 @@ XHR.GETU = function(path, callback) {
   this.xhttp.send(null);
 }
 
+//PUT user
+XHR.PUTU = function(path, callback) {
+  var seed = {"testovanieUpdate":"funguje"};
+  this.xhttp.open("PUT", Config.getUrl() + path+ '/' + Store.objectId, true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  // this.xhttp.setRequestHeader("X-Parse-Session-Token", Token.sessionToken);
+  this.xhttp.setRequestHeader("X-Parse-Master-Key", "masterKey");
+  this.xhttp.setRequestHeader("Content-type", "application/json");
+  this.xhttp.send(JSON.stringify(seed));
+}
+
 //LOGIN user
-XHR.GETL = function(path, callback) {
+XHR.GETLOGIN = function(path, callback) {
   this.xhttp.open("GET", Config.getUrl()+ path + "?password=admin3&email=meno3@meno3.sk", true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.send(null);
 }
 
+//LOGOUT user
+//alternativa je DELETE ale vtedy musime vediet aj Session Id, tu staci len sessionToken
+XHR.POSTLOGOUT = function(path, callback) {
+  this.xhttp.open("POST", Config.getUrl() + path, true);
+  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
+  this.xhttp.setRequestHeader("X-Parse-Session-Token", Token.sessionToken);
+  this.xhttp.send(null);
+}
 
 //DELETE recept, pouzivatel
 XHR.DEL = function(path, callback) {
@@ -472,16 +521,7 @@ XHR.PUTR = function(path, callback) {
   this.xhttp.send(JSON.stringify(seed));
 }
 
-//PUT user
-XHR.PUTU = function(path, callback) {
-  var seed = {"testovanieUpdate":"funguje"};
-  this.xhttp.open("PUT", Config.getUrl() + path+ '/' + Store.objectId, true);
-  this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
- // this.xhttp.setRequestHeader("X-Parse-Session-Token", Token.sessionToken);
-  this.xhttp.setRequestHeader("X-Parse-Master-Key", "masterKey");
-  this.xhttp.setRequestHeader("Content-type", "application/json");
-  this.xhttp.send(JSON.stringify(seed));
-}
+
 
 //GET ZOZNAM RECEPTOV
 XHR.GETR = function(path, callback) {
