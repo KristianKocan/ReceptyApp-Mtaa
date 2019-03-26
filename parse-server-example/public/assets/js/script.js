@@ -463,7 +463,7 @@ XHR.POSTR = function(path, callback) {
 }
 
 XHR.POSTU = function(path, callback) {
-  var seed = {"username":"admin15","password":"admin3","email":"men15@meno3.sk", "testovanieUpdate":"nefunguje"}
+  var seed = {"username":"user","password":"user","email":"user@user.sk", "testovanieUpdate":"nefunguje"}
   this.xhttp.open("POST", Config.getUrl() + path, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
   this.xhttp.setRequestHeader("Content-type", "application/json");
@@ -471,13 +471,16 @@ XHR.POSTU = function(path, callback) {
 }
 
 XHR.POSTF = function(path, callback) {
-  var file = new File(["foo"], "foo.txt", {
-    type: "text/plain",
-  });
-  this.xhttp.open("POST", Config.getUrl() + path + '/text.txt', true);
+  var fileInput = document.getElementById('the-file');
+  console.log(fileInput.files); // A FileList with all selected files
+  var file = fileInput.files[0];
+  console.log(file.name); // "my-holiday-photo.jpg"
+  this.xhttp.open("POST", Config.getUrl() + path + '/' + file.name, true);
   this.xhttp.setRequestHeader("X-Parse-Application-Id", $('#appId').val());
-  this.xhttp.setRequestHeader("Content-type", "text/plain");
-  //this.xhttp.setRequestHeader("X-File-Name", 'parselogo.png');
+  this.xhttp.setRequestHeader("Content-type", file.type);
+  this.xhttp.setRequestHeader("X-File-Name", file.name);
+  this.xhttp.setRequestHeader("X-File-Size", file.size);
+  this.xhttp.setRequestHeader("X-File-Type", file.type);
   this.xhttp.send(file);
 }
 
